@@ -1,13 +1,13 @@
 """
-File: Hacker.py
+File: hacker.py
 Description: <A brief description of this Python module.>
 Author: Simone Pericic
 ID: 110085418
 Username: Persn001
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
-from Rig import rig
-from asset import create_crypto_token
+from rig import Rig
+from asset import Asset
 
 
 class Hacker:
@@ -19,12 +19,12 @@ class Hacker:
 
     def __init__(self, name, rig = None, trace_level = 0):
         self.__name = name
-        self.__inventory = []
+        self.__inventory = self.__starting_inventory()
         self.__rig = rig
         self.__trace_level = trace_level
 
     def __starting_inventory(self):
-        return self.__inventory.append(create_crypto_token())
+        return self.__inventory.append(Asset.create_crypto_token())
 
     def get_name(self):
         return self.__name
@@ -34,6 +34,9 @@ class Hacker:
 
     def get_inventory(self):
         return self.__inventory
+
+    def get_rig(self):
+        return self.__rig
 
     def get_trace_level(self):
         return self.__trace_level
@@ -46,7 +49,7 @@ class Hacker:
         #TODO: starts at
         if self.__rig is not None:
             print(f'{self.__name} already has a rig. Cannont acquire another rig.')
-        elif self.scan_inventory('Crypto_Token') is None:
+        elif self.scan_inventory('crypto_token') is None:
             print(f'{self.__name} needs a Crypto Token to gain a new rig.')
         elif self.__rig is None:
             self.__rig = rig
