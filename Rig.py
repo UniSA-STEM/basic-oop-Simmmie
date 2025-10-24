@@ -8,14 +8,14 @@ This is my own work as defined by the University's Academic Misconduct Policy.
 """
 
 class Rig:
-    def __init__(self, name, damage = 0, status = False, storage, upgrade_level = 0, max_storage = 5, damage_threshold = 2):
+    def __init__(self, name, damage = 0, status = False, storage, upgrade_level = 0, max_storage = 5, damage_max = 2):
         self.__name = name
         self.__damage = damage
         self.__status = status
         self.__storage = storage
         self.__upgrade_level = upgrade_level
         self.__max_storage = max_storage
-        self.__damage_threshold = damage_threshold
+        self.__damage_max = damage_max
 
     def get_name(self):
         return self.__name
@@ -26,7 +26,7 @@ class Rig:
     def get_damage(self):
         return self.__damage
 
-    def if_broken(self):
+    def status(self):
 
     def get_storage(self):
         return self.__storage
@@ -37,11 +37,14 @@ class Rig:
     def get_max_storage(self):
         return self.__max_storage
 
-    def __
+    def __increase_max_storage(self):
+        return self.__max_storage
 
+    def __decrease_max_storage(self):
+        return self.__max_storage
 
-    def get_damage_level(self):
-        return self.__damage_level
+    def get_damage_max(self):
+        return self.__damage_max
 
     def repair(self, cyrpto_token):
         #TODO: repair using cyrpto token, cost 1
@@ -69,3 +72,10 @@ class Rig:
     def __str__(self):
     #TODO: display string.
 
+    name = property(get_name, set_name)
+    damage = property(get_damage, damage_hit, repair)
+    status = property(status)
+    storage = property(get_storage, __starting_assets, store_assets, __generate_assets)
+    upgrade_level = property(get_upgrade_level, upgrade)
+    max_storage = property(get_max_storage)
+    damage_max= property(get_damage_max)

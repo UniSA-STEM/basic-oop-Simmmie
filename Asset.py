@@ -29,15 +29,23 @@ class Assets:
         else:
             return self.__encrypted
 
-    def __str__(self):
-        #TODO: string output
+
+    def create_crypto_token(self):
+
 
     """
     poss create functions for
 
-    creation of crypto token
     data spike
     removable drive
     security chip
     hardware patch
     """
+
+    def __str__(self):
+        #TODO: string output
+
+    name = property(get_name)
+    description = property(get_description)
+    encrypted = property(if_encrypted, set_encrypted)
+
