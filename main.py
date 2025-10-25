@@ -140,6 +140,111 @@ def test_encryption():
 def test_upgrading():
     print_sep('Test no 5: Upgrading System')
 
-    print('\n *** Creating hacker: ')
+    print('\n *** Creating hacker: Morty')
+    morty = Hacker('Morty')
+    morty.gain_rig()
+
+    morty.get_inventory().append(create_hardware_patch())
+    morty.get_inventory().append(create_hardware_patch())
+    morty.get_inventory().append(create_hardware_patch())
+
+    print('\n*** Rig status: ***')
+    print(morty.get_rig())
+
+    print('\n*** Upgrade 1 ***')
+    morty.upgrade_rig()
+
+    print('\n*** Upgrade 2 ***')
+    morty.upgrade_rig()
+
+    print('\n*** Upgrade 3 ***')
+    morty.upgrade_rig()
+
+    print('\n*** Upgrade 4 ***')
+    morty.upgrade_rig()
+
+    print('\n *** testing increaseing damage maximum ***')
+    print('Level 3 rig should take 5 hits to break\n')
+
+    attacker = Hacker('Rick the Attacker')
+    attacker.gain_rig()
+
+    for number in range(4):
+        attacker.get_rig().store_asset(create_data_spike())
+
+    print('\n*** Starting attacks on the rig ***')
+    for i in range(4):
+        print(f'---- Attack {i + 1} ---')
+        attacker.use_data_spike(morty.get_rig())
+        print()
+
+def test_trace_level():
+    print_sep('Test no 6: Trace level')
+
+    print('\n *** Creating hacker: Over Byte')
+    over_byte= Hacker('Over Byte')
+    over_byte.gain_rig()
+
+    for number in range(10):
+        over_byte.get_rig().store_asset(create_data_spike())
+
+    target_rig = Rig('Target Rig')
+
+    print('\n *** Starting attacks to test trace level increase')
+
+    for i in range(7)
+        print(f'---- Attack {i + 1} ---')
+        result = over_byte.use_data_spike(target_rig)
+
+        if not result:
+            print('\n Attack blocked due too high trace level')
+        print()
+    print(f'\n*** Current trace level: {over_byte.get_trace_level} / {over_byte.get_max_trace} ***')
+
+    print('\n *** reducing trace level ***')
+    over_byte.reduce_trace(3)
+
+    print('\n *** Attempting attack after trace level reduction ***')
+    over_byte.use_data_spike(target_rig)
+
+    print('\n *** Final status: ***')
+    print(over_byte)
+
+def test_edge_cases():
+    print_sep('Test no 7: Edge cases')
+
+    print('\n*** Creating hacker: Edgy Egg')
+    edgy_egg = Hacker('Edgy Egg')
+
+    print('\n *** Test: attempt update without rig ***')
+    edgy_egg.get_inventory().append(create_hardware_patch())
+    edgy_egg.upgrade_rig()
+
+    print('\n*** Test: Encrypt without Secutiry Chip ***')
+    edgy_egg.get_inventory().append(create_crypto_token())
+    edgy_egg.encrypt_assets("CryptoToken", 'inventory')
+
+    print('\n*** Test: Gain rig then try to get another one ***')
+    edgy_egg.gain_rig()
+    print()
+    edgy_egg.gain_rig()
+    print()
+
+    print('\n *** Test: Attacking without Data Spike ***')
+    target_rig = Rig('Target Rig')
+
+    edgy_egg.get_rig().release_asset('Data Spike')
+    edgy_egg.get_rig().release_asset('Data Spike')
+    print()
+    edgy_egg.use_data_spike(target_rig)
+
+    print('\n *** Extract from working rig ***')
+    edgy_egg.get_inventory().append(create_removable_drive())
+    edgy_egg.extract_assets(target_rig)
+
+    print('\n *** Test: Repair undamaged rig **')
+    edgy_egg.get_inventory().append(create_crypto_token())
+    crypto = edgy_egg.scan_inventory('CryptoToken')
+    edgy_egg.get_rig().repair(crypto)
 
 
