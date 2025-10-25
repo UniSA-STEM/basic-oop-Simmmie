@@ -6,17 +6,22 @@ ID: 110085418
 Username: persn001
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
-from asset import Asset
+
+import random
+from asset import *
+
 
 class Rig:
 
-    __MAX_STORAGE = 5
-    __DAMAGE_MAX = 2
+    __STARTING_STORAGE = 5
+    __STARTING_DAMAGE = 2
+    __STORAGE_PER_LEVEL = 2
+    __ADDITION_DAMAGE_LEVELUP = 1
 
-    def __init__(self, name, damage = 0, status = False, upgrade_level = 0, max_storage = 5, damage_max = 2):
+    def __init__(self, name, damage = 0, condition = False, upgrade_level = 0, max_storage = 5, damage_max = 2):
         self.__name = name
         self.__damage = damage
-        self.__status = status
+        self.__condition = condition
         self.__storage = []
         self.__upgrade_level = upgrade_level
         self.__max_storage = max_storage
@@ -31,19 +36,21 @@ class Rig:
     def get_damage(self):
         return self.__damage
 
-    def status(self):
+    def condition(self):
         if self.__status is False:
-            print(f'{self.__name} has no damage.')
+            print(f'{self.__name} Pristine (Level {self.__damage_max}.')
         elif self.__status is True and self.__damage is not == self.__damage_max:
             print
 
-            print(f'{self.__name} is broken.')
+            print(f'{self.__name} Broken (Level 0).')
 
     def get_storage(self):
         return self.__storage
 
-    def __starting_storage(self):
-        return self.__storage
+    def __starting_assets(self):
+        self.__storage.append(create_data_spike())
+        self.__storage.append(create_data_spike())
+        self.__storage.append(create_removable_drive())
 
     def get_upgrade_level(self):
         return self.__upgrade_level
@@ -51,16 +58,16 @@ class Rig:
     def get_max_storage(self):
         return self.__max_storage
 
-    def __increase_max_storage(self):
-        return self.__max_storage
+    def calculate_damage_max(self):
+        self.__damage_max = self.__STARTING_DAMAGE +(self.__upgrade_level * self.__STORAGE_PER_LEVEL)
 
-    def __decrease_max_storage(self):
-        return self.__max_storage
+    def __calculate_max_storage(self):
+        self.__max_storage = self.__STARTING_STORAGE + (self.__upgrade_level * self.__ADDITION_DAMAGE_LEVELUP)
 
     def get_damage_max(self):
         return self.__damage_max
 
-    def repair(self, cyrpto_token):
+    def repair(self, crypto_token):
         if crypto_token.name != 'CryptoToken':
             raise ValueError('Repair requires a CryptoToken.')
         elif self.__damage == 0 and not self.__status:

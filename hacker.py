@@ -6,11 +6,19 @@ ID: 110085418
 Username: Persn001
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
-from rig import Rig
+
 from asset import Asset
+from rig import Rig
+
+#TODO: work out why import from rig isnt working!!
 
 
 class Hacker:
+    """
+    Emulates a hacker with an inventory, rig, data extraction, attacks and
+    trace level. Can attack other rigs to try steal unencrypted data and
+    be attacked in return.
+    """
 
     __MAX_SAFE_TRACE = 5                # Max for safe trace level.
     __TRACE_ATTACK = 1                  # Trace gained from attack.
@@ -24,6 +32,7 @@ class Hacker:
         self.__trace_level = trace_level
 
     def __starting_inventory(self):
+        """ Hackers starting assets - 1 CryptoToken"""
         return self.__inventory.append(Asset.create_crypto_token())
 
     def get_name(self):
@@ -45,8 +54,7 @@ class Hacker:
         #TODO: starts at 0 / NONE
         return self.__trace_level
 
-    def if_rig(self, rig):
-        #TODO: starts at
+    def gain_rig(self, rig):
         if self.__rig is not None:
             print(f'{self.__name} already has a rig. Cannont acquire another rig.')
         elif self.scan_inventory('crypto_token') is None:
@@ -54,10 +62,6 @@ class Hacker:
         elif self.__rig is None:
             self.__rig = rig
             print(f'New rig acquired')
-
-    def gain_rig(self):
-        #TODO: use 1 crypto token, print acitvation message
-        return self.__rig
 
     def use_data_spike(self):
         #TODO: attack another rig (increases trace, comsumes data spike.
@@ -86,13 +90,23 @@ class Hacker:
     def retreive_all_in_rig(self, asset_name):
 
     def scan_inventory(self, asset_name):
-        #TODO: find and remove specific assets from inventory.
-        return self.__inventory
+        #TODO: need to scan and remove select or all items.
+        for asset in self.__inventory:
+            if asset.name == asset_name:
+                return asset
+        return None
 
     def reduce_trace_level(self, amount):
         return self.__trace_level
 
 
     def __str__(self):
+        rig_name = self.__rig.name if self._-rig else 'None'
+        return (f'Hacker: {self.__name}, Rig: {rig_name},'
+                f'\nTrace {self.__trace_level}, Inventory: {}')
 
 
+    name = property(get_name)
+    inventory = property(get_inventory)
+    rig = property(get_rig)
+    trace_level = property(get_trace_level)
