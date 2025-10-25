@@ -113,18 +113,85 @@ class Hacker:
                   f'\n Trace level increased: {self.__trace_level} / {self.__MAX_SAFE_TRACE}')
             return True
 
-    def encrypt_assets(self, asset_name):
+    def encrypt_assets(self, asset_name, location = 'inventory'):
         chip = self.scan_inventory('Security Chip')
         if chip is None:
-            print(f'{self.__name} needsa Security Chip to encrypt assets.')
+            print(f'{self.__name} needs a Security Chip to encrypt assets.')
             return False
 
         asset = None
 
-        #TODO: finish function with new approach.
+        if location == 'inventory':
+            asset = self.__find_asset_inventory(asset_name)
+            if asset is None:
+                print(f'{asset_name} not found in inventory.')
+                return False
+        elif location == 'rig':
+            if self.__rig is None:
+                print(f'{self.__name} need a rig to encrypt assets in rig storage.')
+                return False
 
-    def decrypt_assts(self):
-        #TODO: Decrypt asset uses security chip
+            found = False
+            for rig_asset in self.__rig.get_storage():
+                if rig_asset.get_name() == asset_name and not found:
+                    asset = rig_asset
+                    found = True
+
+            if asset is None:
+                print(f'{asset_name} not found in rig storage.')
+                return False
+        else:
+            print(f'\nInvalid location: {location}')
+            return False
+
+        if asset.is_encrypted():
+            print(f'{asset_name} is already encrypted')
+            return False
+
+        asset.set_encrypted(True)
+        print(f'{asset_name} encrypted in {location}.'
+              f'\n Asset is now protected from theft.)
+        return True
+
+    def decrypt_assets(self, asset_name, location = 'inventory'):
+        chip = self.scan_inventory('Security Chip')
+        if chip is None:
+            print(f'{self.__name} needs a Security Chip to decrypt assets.')
+            return False
+
+        asset = None
+
+        if location == 'inventory':
+            asset = self.__find_asset_inventory(asset_name)
+            if asset is None:
+                print(f'{asset_name} not found in inventory.')
+                return False
+        elif location == 'rig':
+            if self.__rig is None:
+                print(f'{self.__name} need a rig to decrypt assets in rig storage.')
+                return False
+
+            found = False
+            for rig_asset in self.__rig.get_storage():
+                if rig_asset.get_name() == asset_name and not found:
+                    asset = rig_asset
+                    found = True
+
+            if asset is None:
+                print(f'{asset_name} not found in rig storage.')
+                return False
+        else:
+            print(f'\nInvalid location: {location}')
+            return False
+
+        if asset.is_encrypted():
+            print(f'{asset_name} is not encrypted')
+            return False
+
+        asset.set_encrypted(False)
+        print(f'{asset_name} decrypted in {location}.'
+              f'\n Asset is now be transferred.)
+        return True
 
     def upgrade_rig(self):
         patch = self.scan_inventory('Hardware Patch')
