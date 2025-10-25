@@ -188,7 +188,7 @@ class Hacker:
         print(f'Stored {count} assets in rig.')
         return True
 
-    def retreive_all_in_rig(self):
+    def retrieve_all_in_rig(self):
         if self.__rig is None:
             print(f'{self.__name} needs a rig.')
             return False
@@ -208,7 +208,7 @@ class Hacker:
 
     def __find_asset_inventory(self, asset_name):
         for asset in self.__inventory:
-            if asset.get_name() == asset_name
+            if asset.get_name() == asset_name:
                 return asset
         return None
 
@@ -217,11 +217,10 @@ class Hacker:
             self.__inventory.remove(asset)
 
     def scan_inventory(self, asset_name):
-        #TODO: need to scan and remove select or all items.
-        for asset in self.__inventory:
-            if asset.name == asset_name:
-                return asset
-        return None
+        asset = self.__find_asset_inventory(asset_name)
+        if asset:
+            self.__remove_asset_inventory(asset)
+        return asset
 
     def reduce_trace_level(self, amount = 1):
         self.__trace_level = max(0, self.__trace_level - amount)
@@ -229,9 +228,11 @@ class Hacker:
               f'Current trace level: {self.__trace_level}')
 
     def __str__(self):
-        rig_name = self.__rig.name if self._-rig else 'None'
-        return (f'Hacker: {self.__name}, Rig: {rig_name},'
-                f'\nTrace {self.__trace_level}, Inventory: {}')
+        rig_name = self.__rig.name if self.__rig else 'None'
+        return (f'\nHacker: {self.__name} '
+                f'\nRig: {rig_name}'
+                f'\nTrace {self.__trace_level} / {self.__MAX_SAFE_TRACE}'
+                f' \nInventory: {self.__inventory}')
 
 
     name = property(get_name)
