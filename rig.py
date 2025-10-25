@@ -13,6 +13,9 @@ from asset import *
 
 class Rig:
 
+    """Rig class emulates a hackers computer (rig) system: maanages storage,
+    damage, upgrades and asset generation over time"""
+
     __STARTING_STORAGE = 5                      # Starting storage max.
     __STARTING_DAMAGE = 2                       # Starting damage max.
     __STORAGE_PER_LEVEL = 2                     # Storage space increase per level up.
