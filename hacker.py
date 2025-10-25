@@ -50,7 +50,7 @@ class Hacker:
         return self.__trace_level
 
     def get_max_trace(self):
-        return self.__MAX_TRACE
+        return self.__MAX_SAFE_TRACE
 
     def __check_trace_level(self):
         if self.__trace_level <= self.__MAX_SAFE_TRACE:
@@ -61,34 +61,45 @@ class Hacker:
     def has_rig(self):
         return self.__rig is not None
 
-    def gain_rig(self, rig):
+    def gain_rig(self, rig = None):
         if self.__rig is not None:
             print(f'\n{self.__name} already has a rig. Cannont acquire another rig.')
             return False
-        elif self.scan_inventory('cryptoToken') is None:
+
+        token = self.scan_inventory('CryptoToken')
+        if token is None:
             print(f'\n{self.__name} needs a Crypto Token to gain a new rig.')
             return False
-        elif self.__rig is None:
-            self.__rig = rig
-            print(f'\nNew rig acquired.')
-            print(f'Rig is online and functional. ')
-            return True
+
+        elif rig is None:
+            rig = Rig(f'{self.__name}\'s rig.')
+
+        self.__rig = rig
+        print(f'\nNew rig acquired.')
+        print(f'\nRig is online and functional. ')
+        return True
 
     def use_data_spike(self, target_rig):
         if self.__rig is None:
             print(f'{self.__name} has no rig to launch attacks.')
             return False
+
         elif not self.__check_trace_level():
             print(f'Trace level is too high {self.__trace_level}.'
                   f'Reduce trace level before attacking.'
                   f'Max safe level: {self.__MAX_SAFE_TRACE}.')
             return False
-        else:
-            target_rig.take_hit()
-            self.__trace_level += self.__TRACE_ATTACK
-            print(f'{self.__name} launced a Data Spike at {target_rig.get_name()}.'
-                  f'\n Trace level increased: {self.__trace_level} / {self.__MAX_SAFE_TRACE}')
-            return True
+
+        spike = self.__rig.send_asset('Data Spike')
+        if spike is None:
+            print(f'{self.__rig.get_name()} has no Data Spikes.')
+            return False
+
+        target_rig.take_hit()
+        self.__trace_level += self.__TRACE_ATTACK
+        print(f'{self.__name} launced a Data Spike at {target_rig.get_name()}.'
+                f'\n Trace level increased: {self.__trace_level} / {self.__MAX_SAFE_TRACE}')
+        return True
 
     def extract_assets(self, target_rig):
         drive = self.scan_inventory('Removable Drive')
@@ -150,7 +161,7 @@ class Hacker:
 
         asset.set_encrypted(True)
         print(f'{asset_name} encrypted in {location}.'
-              f'\n Asset is now protected from theft.)
+              f'\n Asset is now protected from theft.')
         return True
 
     def decrypt_assets(self, asset_name, location = 'inventory'):
@@ -184,13 +195,13 @@ class Hacker:
             print(f'\nInvalid location: {location}')
             return False
 
-        if asset.is_encrypted():
+        if not asset.is_encrypted():
             print(f'{asset_name} is not encrypted')
             return False
 
         asset.set_encrypted(False)
         print(f'{asset_name} decrypted in {location}.'
-              f'\n Asset is now be transferred.)
+              f'\n Asset is now be transferred.')
         return True
 
     def upgrade_rig(self):
@@ -215,7 +226,7 @@ class Hacker:
             return False
 
         self.__remove_asset_inventory(asset)
-        success = self.__rig.store_asset(asset)
+        success = self.__rig.store_assets(asset)
 
         if not success:
             self.__inventory.append(asset)
@@ -295,12 +306,17 @@ class Hacker:
               f'Current trace level: {self.__trace_level}')
 
     def __str__(self):
-        rig_name = self.__rig.name if self.__rig else 'None'
-        return (f'\nHacker: {self.__name} '
-                f'\nRig: {rig_name}'
-                f'\nTrace {self.__trace_level} / {self.__MAX_SAFE_TRACE}'
-                f' \nInventory: {self.__inventory}')
+        rig_name = self.__rig.get_name() if self.__rig else "None"
 
+        output = f"Hacker: {self.__name}\n"
+        output += f"Rig: {rig_name}\n"
+        output += f"Trace: {self.__trace_level} / {self.__MAX_SAFE_TRACE}\n"
+        output += "Inventory:"
+
+        for asset in self.__inventory:
+            output += f" {asset}\n"
+
+        return output
 
     name = property(get_name)
     inventory = property(get_inventory)

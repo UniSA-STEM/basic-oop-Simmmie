@@ -7,8 +7,8 @@ Username: Persn001
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
 
-from hacker import Hacker
-from rig import Rig
+from hacker import *
+from rig import *
 from asset import *
 
 """
@@ -89,7 +89,7 @@ def test_battles():
     print('Target:')
     print(target_rig)
 
-    print('\n*** Potatoo launches an attack ***\n ')
+    print('\n*** Potato launches an attack ***\n ')
 
     print('--- Attack 1 ---')
     potato.use_data_spike(target_rig)
@@ -166,16 +166,16 @@ def test_upgrading():
     print('\n *** testing increaseing damage maximum ***')
     print('Level 3 rig should take 5 hits to break\n')
 
-    attacker = Hacker('Rick the Attacker')
-    attacker.gain_rig()
+    rick = Hacker('Rick the Attacker')
+    rick.gain_rig()
 
     for number in range(4):
-        attacker.get_rig().store_asset(create_data_spike())
+        rick.get_rig().store_assets(create_data_spike())
 
     print('\n*** Starting attacks on the rig ***')
     for i in range(4):
         print(f'---- Attack {i + 1} ---')
-        attacker.use_data_spike(morty.get_rig())
+        rick.use_data_spike(morty.get_rig())
         print()
 
 def test_trace_level():
@@ -186,13 +186,13 @@ def test_trace_level():
     over_byte.gain_rig()
 
     for number in range(10):
-        over_byte.get_rig().store_asset(create_data_spike())
+        over_byte.get_rig().store_assets(create_data_spike())
 
     target_rig = Rig('Target Rig')
 
     print('\n *** Starting attacks to test trace level increase')
 
-    for i in range(7)
+    for i in range(7):
         print(f'---- Attack {i + 1} ---')
         result = over_byte.use_data_spike(target_rig)
 
@@ -252,7 +252,7 @@ def test_edge_cases():
     for i in range(10):
         edgy_egg.get_rig().store_assets(create_data_spike())
         print('\n *** Attempting to store more ***')
-        edgy_egg.get_rig().store_asset(create_crypto_token())
+        edgy_egg.get_rig().store_assets(create_crypto_token())
 
     print('\n *** Test: Gain rig without CryptoToken **')
     broke = Hacker('Broky Hacker')
@@ -300,7 +300,7 @@ def test_complex():
     print('\n *** Starting Battles ***')
     print('=' * 60 + '\n')
 
-    print('\n *** Soap attacks Ghost\'s rig ***)
+    print('\n *** Soap attacks Ghost\'s rig ***')
     hacker1.use_data_spike(hacker2.get_rig())
     hacker1.use_data_spike(hacker2.get_rig())
     hacker1.use_data_spike(hacker2.get_rig())
@@ -366,7 +366,7 @@ def test_repair():
 
 if __name__ == '__main__':
     print('\n' + '=' * 60)
-    print('=' + ' ' * 12 "Comprehensive Test Suite" + ' ' * 22 + '=')
+    print('=' + ' ' * 12 + "Comprehensive Test Suite" + ' ' * 22 + '=')
     print('=' * 60)
 
 test_basic()
@@ -381,5 +381,5 @@ test_asset_gen()
 test_repair()
 
 print('\n' + '=' * 60)
-    print('=' + ' ' * 15 "All tests complete" + ' ' * 25 + '=')
-    print('=' * 60)
+print('=' + ' ' * 15 + "All tests complete" + ' ' * 25 + '=')
+print('=' * 60)
