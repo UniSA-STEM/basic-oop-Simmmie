@@ -199,7 +199,7 @@ class Rig:
             status = f'Damaged {self.__damage} / {self.__damage_max}'
 
         storage_info = f'{len(self.__storage)} / {self.__max_storage}'
-        return (f'Rig:          {self.__name}'
+        return (f'Rig:         {self.__name}'
                 f'\nCondition:  {status}'
                 f'\nLevel:      {self.__upgrade_level}'
                 f'\nStorage:    {storage_info}')

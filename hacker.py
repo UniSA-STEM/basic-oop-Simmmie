@@ -71,11 +71,13 @@ class Hacker:
             print(f'\n{self.__name} needs a Crypto Token to gain a new rig.')
             return False
 
-        elif rig is None:
-            rig = Rig(f'{self.__name}\'s rig.')
+        if rig is None:
+            rig = Rig(f'{self.__name}\'s rig')
+        elif isinstance(rig, str):
+            rig = Rig(rig)
 
         self.__rig = rig
-        print(f'\nNew rig acquired.')
+        print(f'\nNew rig acquired:{self.__rig.get_name()}')
         print(f'\nRig is online and functional. ')
         return True
 
@@ -83,7 +85,6 @@ class Hacker:
         if self.__rig is None:
             print(f'{self.__name} has no rig to launch attacks.')
             return False
-
         elif not self.__check_trace_level():
             print(f'Trace level is too high {self.__trace_level}.'
                   f'Reduce trace level before attacking.'
@@ -94,8 +95,18 @@ class Hacker:
         if spike is None:
             print(f'{self.__rig.get_name()} has no Data Spikes.')
             return False
+        elif not self.__check_trace_level():
+            print(f'Trace level is too high {self.__trace_level}.')
+            print(f'Reduce trace level before attacking.')
+            print(f'Max safe level: {self.__MAX_SAFE_TRACE}.')
+            return False
 
-        target_rig.take_hit()
+        spike = self.__rig.send_asset('Data Spike')
+        if spike is None:
+            print(f'{self.__rig.get_name()} has no data spikes.')
+            return False
+
+        target_rig.damage_hit()
         self.__trace_level += self.__TRACE_ATTACK
         print(f'{self.__name} launced a Data Spike at {target_rig.get_name()}.'
                 f'\n Trace level increased: {self.__trace_level} / {self.__MAX_SAFE_TRACE}')
@@ -256,7 +267,7 @@ class Hacker:
         inventory_copy = self.__inventory.copy()
 
         for asset in inventory_copy:
-            if self.__rig.get_storage() <self.__rig.get_max_storage():
+            if len(self.__rig.get_storage()) <self.__rig.get_max_storage():
                 self.__remove_asset_inventory(asset)
                 if self.__rig.store_assets(asset):
                     count += 1

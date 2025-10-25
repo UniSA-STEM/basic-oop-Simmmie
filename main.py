@@ -202,7 +202,7 @@ def test_trace_level():
     print(f'\n*** Current trace level: {over_byte.get_trace_level} / {over_byte.get_max_trace} ***')
 
     print('\n *** reducing trace level ***')
-    over_byte.reduce_trace(3)
+    over_byte.reduce_trace_level(3)
 
     print('\n *** Attempting attack after trace level reduction ***')
     over_byte.use_data_spike(target_rig)
@@ -233,8 +233,8 @@ def test_edge_cases():
     print('\n *** Test: Attacking without Data Spike ***')
     target_rig = Rig('Target Rig')
 
-    edgy_egg.get_rig().release_asset('Data Spike')
-    edgy_egg.get_rig().release_asset('Data Spike')
+    edgy_egg.get_rig().send_asset('Data Spike')
+    edgy_egg.get_rig().send_asset('Data Spike')
     print()
     edgy_egg.use_data_spike(target_rig)
 
