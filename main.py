@@ -331,14 +331,14 @@ def test_asset_gen():
     print('\n *** Generating 5 random assets ***')
     for i in range(5):
         print(f'Generation number {i + 1}')
-        pow_w.get_rig().generate_asset()
+        pow_w.get_rig().generate_assets()
         print()
 
     print('\n *** Rig status: ***')
     print(pow_w.get_rig())
 
     print('\n *** Attempting to generate when storage is full ***')
-    pow_w.get_rig().generate_asset()
+    pow_w.get_rig().generate_assets()
 
 def test_repair():
     print_sep('Test no 10: Repairing rig')
