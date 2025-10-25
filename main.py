@@ -247,4 +247,139 @@ def test_edge_cases():
     crypto = edgy_egg.scan_inventory('CryptoToken')
     edgy_egg.get_rig().repair(crypto)
 
+    print('\n *** Test: store asset in full rig **')
+    print('Filling rig storage to max level')
+    for i in range(10):
+        edgy_egg.get_rig().store_assets(create_data_spike())
+        print('\n *** Attempting to store more ***')
+        edgy_egg.get_rig().store_asset(create_crypto_token())
 
+    print('\n *** Test: Gain rig without CryptoToken **')
+    broke = Hacker('Broky Hacker')
+    broke.scan_inventory('CryptoToken')
+    broke.gain_rig()
+
+def test_complex():
+    print_sep('Test no 8')
+
+    print('\n *** Corpo Heist'
+          '\n Two hackers compete take the data.')
+
+    print('\n *** Setting up hackers **')
+    hacker1 = Hacker('Soap')
+    hacker2 = Hacker('Goat')
+
+    hacker1.gain_rig()
+    hacker2.gain_rig()
+
+    print('\n *** Hackers gathering assets ***')
+    hacker1.get_inventory().append(create_hardware_patch())
+    hacker1.get_inventory().append(create_security_chip())
+    hacker2.get_inventory().append(create_hardware_patch())
+    hacker2.get_inventory().append(create_security_chip())
+
+    print('\n *** Soap upgrading rig ***')
+    hacker1.upgrade_rig()
+    hacker1.upgrade_rig()
+
+    print('\n *** Goat upgrading rig ***')
+    hacker1.upgrade_rig()
+
+    print('\n *** Soap encrypting assets ***')
+    hacker1.get_inventory().append(create_crypto_token())
+    hacker1.get_inventory().append(create_crypto_token())
+    hacker1.store_in_rig('CryptoToken')
+    hacker1.encrypt_assets('CryptoToken', 'rig')
+
+    print('\n *** Goat encrypting assets ***')
+    hacker2.get_inventory().append(create_crypto_token())
+    hacker2.store_in_rig('CryptoToken')
+    hacker2.encrypt_assets('CryptoToken', 'rig')
+
+    print('\n' + '=' * 60)
+    print('\n *** Starting Battles ***')
+    print('=' * 60 + '\n')
+
+    print('\n *** Soap attacks Ghost\'s rig ***)
+    hacker1.use_data_spike(hacker2.get_rig())
+    hacker1.use_data_spike(hacker2.get_rig())
+    hacker1.use_data_spike(hacker2.get_rig())
+    hacker1.use_data_spike(hacker2.get_rig())
+
+    print('\n *** Soap attempts to extract data ***')
+    hacker1.get_inventory().append(create_removable_drive())
+    hacker1.extract_assets(hacker2.get_rig())
+
+    print('\n' + '=' * 60)
+    print('\n *** Results of Battles ***')
+    print('=' * 60 + '\n')
+
+    print('\n Winner: Soap')
+    print(hacker1)
+    print(hacker1.get_rig())
+
+def test_asset_gen():
+    print_sep('Test no 9: Asset generation')
+
+    print('\n *** Creating hacker: Poww')
+    pow_w = Hacker('Poww')
+    pow_w.gain_rig()
+
+    print('\n *** Rig status: ***')
+    print(pow_w.get_rig())
+
+    print('\n *** Generating 5 random assets ***')
+    for i in range(5):
+        print(f'Generation number {i + 1}')
+        pow_w.get_rig().generate_asset()
+        print()
+
+    print('\n *** Rig status: ***')
+    print(pow_w.get_rig())
+
+    print('\n *** Attempting to generate when storage is full ***')
+    pow_w.get_rig().generate_asset()
+
+def test_repair():
+    print_sep('Test no 10: Repairing rig')
+
+    print('\n *** Creating hacker: Crane')
+    crane = Hacker('Crane')
+    crane.gain_rig()
+
+    attacker = Hacker('Baron')
+    attacker.gain_rig()
+
+    print('\n *** Attacking Crane\'s rig ***')
+    attacker.use_data_spike(crane.get_rig())
+
+    print('\n *** Rig status: ***')
+    print(crane.get_rig())
+
+    print('\n *** Repairing rig ***')
+    crane.get_inventory().append(create_crypto_token())
+    crypto = crane.scan_inventory('CryptoToken')
+    crane.get_rig().repair(crypto)
+
+    print('\n *** Rig status: ***')
+    print(crane.get_rig())
+
+if __name__ == '__main__':
+    print('\n' + '=' * 60)
+    print('=' + ' ' * 12 "Comprehensive Test Suite" + ' ' * 22 + '=')
+    print('=' * 60)
+
+test_basic()
+test_asset_management()
+test_battles()
+test_upgrading()
+test_encryption()
+test_trace_level()
+test_edge_cases()
+test_complex()
+test_asset_gen()
+test_repair()
+
+print('\n' + '=' * 60)
+    print('=' + ' ' * 15 "All tests complete" + ' ' * 25 + '=')
+    print('=' * 60)
